@@ -1,73 +1,63 @@
-# Welcome to your Lovable project
+# AI Product Media Generator
 
-## Project info
+A powerful web application that generates professional product images and video advertisements using AI prompts. Create, store, and serve optimized visual content for your products with ease.
 
-**URL**: https://lovable.dev/projects/935dc213-0254-467e-9b83-e6b69a6da45b
+## 📋 Overview
 
-## How can I edit this code?
+This application streamlines the creation of professional marketing materials by leveraging AI technology to generate high-quality product images and video advertisements. Simply provide text prompts describing your desired visuals, and the app handles the rest—from generation to storage and optimized delivery.
 
-There are several ways of editing your application.
+## ✨ Features
 
-**Use Lovable**
+- **AI-Powered Generation**: Create professional product images and video ads using natural language prompts
+- **Asset Management**: Centralized storage system for all generated media assets
+- **Image Optimization**: Automatically optimized images for fast web delivery
+- **Responsive Interface**: Modern, intuitive UI built with React and shadcn-ui components
+- **Fast Performance**: Optimized build with Vite for lightning-fast load times
+- **Type-Safe**: Fully typed with TypeScript for reliability and better developer experience
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/935dc213-0254-467e-9b83-e6b69a6da45b) and start prompting.
+## 🛠️ Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Framework:** React 18
+- **Language:** TypeScript
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **UI Components:** shadcn-ui
+- **Package Manager:** npm
+- **Deployment:** Vercel
 
-**Use your preferred IDE**
+## 📦 Installation
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Prerequisites
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+- Node.js (v16 or higher)
+- npm or yarn
 
-Follow these steps:
+### Local Development Setup
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. **Clone the repository**
+   git clone <YOUR_GIT_URL>
+2. **Navigate to project directory**
+   cd <YOUR_PROJECT_NAME>
+3. **Install dependencies**
+   npm install
+4. **Start Development server**
+   npm run dev
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+**Use Cases**
 
-# Step 3: Install the necessary dependencies.
-npm i
+E-commerce product photography
+Social media advertising content
+Marketing campaign materials
+Product catalog images
+Video advertisements for digital platforms
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+**🚀 Deployment**
+The application is deployed and ready for production use. Updates pushed to the main branch are automatically deployed.
+**🤝 Contributing**
+Contributions are welcome! Please feel free to submit a Pull Request.
+**📄 License**
+This project is licensed under the MIT License.
+**📧 Contact**
+For questions or feedback, please reach out through the project repository.
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/935dc213-0254-467e-9b83-e6b69a6da45b) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Built with modern web technologies for optimal performance and scalability
