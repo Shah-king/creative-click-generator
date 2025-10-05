@@ -1,3 +1,6 @@
+// This file is a Deno function. Disable TypeScript/ESLint checks that assume a Node environment.
+/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any */
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -11,7 +14,8 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, imageUrl } = await req.json();
+    interface GenRequest { prompt: string; imageUrl?: string | null }
+    const { prompt, imageUrl } = await req.json() as GenRequest;
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     
     if (!LOVABLE_API_KEY) {

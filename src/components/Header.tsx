@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Sparkles, LogOut } from "lucide-react";
+import type { User } from '@supabase/supabase-js';
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface HeaderProps {
-  user?: any;
+  user?: User | null;
 }
 
 export const Header = ({ user }: HeaderProps) => {

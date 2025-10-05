@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Header } from "@/components/Header";
+import type { User } from '@supabase/supabase-js';
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2, Download } from "lucide-react";
@@ -16,7 +17,7 @@ interface GeneratedAd {
 
 const Gallery = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [ads, setAds] = useState<GeneratedAd[]>([]);
   const [loading, setLoading] = useState(true);
 
