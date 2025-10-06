@@ -2,7 +2,6 @@
 // This file is a Deno function that calls the Lovable AI gateway to request video generation.
 // It's a prototype: set LOVABLE_API_KEY and optionally LOVABLE_VIDEO_MODEL in your Supabase function env.
 declare const Deno: { env: { get(key: string): string | undefined } };
-// @ts-expect-error: Remote import for Deno runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 // We'll compute CORS headers per-request so we can echo the Origin header back
