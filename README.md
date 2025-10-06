@@ -23,6 +23,7 @@ This application streamlines the creation of professional marketing materials by
 - **Styling:** Tailwind CSS
 - **UI Components:** shadcn-ui
 - **Package Manager:** npm
+- **Backend:** Supabase 
 - **Deployment:** Vercel
 
 ## 📦 Installation
