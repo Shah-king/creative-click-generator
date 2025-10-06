@@ -1,14 +1,14 @@
 # AI Product Media Generator
 
-A powerful web application that generates professional product images and video advertisements using AI prompts. Create, store, and serve optimized visual content for your products with ease.
+A powerful web application that generates professional product images using AI prompts. Create, store, and serve optimized visual content for your products with ease.
 
 ## 📋 Overview
 
-This application streamlines the creation of professional marketing materials by leveraging AI technology to generate high-quality product images and video advertisements. Simply provide text prompts describing your desired visuals, and the app handles the rest—from generation to storage and optimized delivery.
+This application streamlines the creation of professional marketing materials by leveraging AI technology to generate high-quality product images. Simply provide text prompts describing your desired visuals, and the app handles the rest—from generation to storage and optimized delivery.
 
 ## ✨ Features
 
-- **AI-Powered Generation**: Create professional product images and video ads using natural language prompts
+- **AI-Powered Generation**: Create professional product images using natural language prompts
 - **Asset Management**: Centralized storage system for all generated media assets
 - **Image Optimization**: Automatically optimized images for fast web delivery
 - **Responsive Interface**: Modern, intuitive UI built with React and shadcn-ui components
@@ -49,7 +49,7 @@ E-commerce product photography
 Social media advertising content
 Marketing campaign materials
 Product catalog images
-Video advertisements for digital platforms
+Image assets for digital platforms
 
 **🚀 Deployment**
 The application is deployed and ready for production use. Updates pushed to the main branch are automatically deployed.
