@@ -17,6 +17,9 @@ const Generate = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [generatedUrl, setGeneratedUrl] = useState<string | null>(null);
+  const [videoJobId, setVideoJobId] = useState<string | null>(null);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [videoProcessing, setVideoProcessing] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -117,6 +120,94 @@ const Generate = () => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+  };
+
+  // Video generation flow
+  const handleGenerateVideo = async () => {
+    if (!prompt.trim()) {
+      toast.error("Please enter a prompt");
+      return;
+    }
+
+    setVideoProcessing(true);
+    setVideoUrl(null);
+    setVideoJobId(null);
+
+    try {
+      let uploadedImageUrl = null;
+      if (imageFile && user) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${user.id}/${Math.random()}.${fileExt}`;
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(fileName, imageFile);
+        if (uploadError) throw uploadError;
+        const { data } = supabase.storage.from('product-images').getPublicUrl(fileName);
+        uploadedImageUrl = data.publicUrl;
+      }
+
+      let res;
+      try {
+        res = await supabase.functions.invoke('generate-video', {
+          body: { prompt, imageUrl: uploadedImageUrl, durationSeconds: 6 }
+        });
+      } catch (invokeErr) {
+        console.error('Failed to call generate-video function (invoke error):', invokeErr);
+        toast.error('Failed to contact the video function. See console for details.');
+        setVideoProcessing(false);
+        return;
+      }
+
+      if (res?.error) {
+        console.error('generate-video returned error:', res.error);
+        toast.error(res.error?.message || 'Video function returned an error');
+        setVideoProcessing(false);
+        return;
+      }
+
+      // If immediate video URL returned
+      if (res.data?.videoUrl) {
+        setVideoUrl(res.data.videoUrl);
+        setVideoProcessing(false);
+        // Optionally save to DB under user's videos
+        return;
+      }
+
+      const jobId = res.data?.jobId;
+      if (jobId) {
+        setVideoJobId(jobId);
+        // Poll for status
+        const poll = async () => {
+          try {
+            const statusRes = await supabase.functions.invoke('video-status', { body: { jobId } });
+            if (statusRes.error) throw statusRes.error;
+            const job = statusRes.data?.job;
+            if (job?.status === 'completed' && job?.result_url) {
+              setVideoUrl(job.result_url);
+              setVideoProcessing(false);
+              setVideoJobId(null);
+              return;
+            }
+            if (job?.status === 'failed') {
+              toast.error('Video generation failed');
+              setVideoProcessing(false);
+              setVideoJobId(null);
+              return;
+            }
+          } catch (pollErr) {
+            console.error('Polling error', pollErr);
+          }
+          setTimeout(poll, 3000);
+        };
+        setTimeout(poll, 1500);
+      } else {
+        throw new Error('No job id returned');
+      }
+    } catch (err) {
+      console.error('Video generation error', err);
+      toast.error(err instanceof Error ? err.message : 'Failed to generate video');
+      setVideoProcessing(false);
+    }
   };
 
   return (
@@ -222,6 +313,27 @@ const Generate = () => {
                   <p className="text-muted-foreground">
                     Your generated ad will appear here
                   </p>
+                )}
+              </div>
+            </Card>
+          </div>
+
+          {/* Video generation section */}
+          <div className="mt-8 max-w-6xl mx-auto">
+            <Card className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold">Generate Video</h3>
+                <Button onClick={handleGenerateVideo} disabled={videoProcessing}>
+                  {videoProcessing ? 'Processing...' : 'Generate Video'}
+                </Button>
+              </div>
+              <div className="bg-black/5 rounded-lg p-4 min-h-[200px] flex items-center justify-center">
+                {videoUrl ? (
+                  <video controls src={videoUrl} className="w-full h-auto rounded" />
+                ) : videoProcessing ? (
+                  <p className="text-muted-foreground">Video is being generated. This can take a while...</p>
+                ) : (
+                  <p className="text-muted-foreground">Your generated video will appear here</p>
                 )}
               </div>
             </Card>

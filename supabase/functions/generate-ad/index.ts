@@ -1,6 +1,6 @@
-// This file is a Deno function. Disable TypeScript/ESLint checks that assume a Node environment.
-/* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any */
-// @ts-nocheck
+// This file is a Deno function.
+declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error: Remote import for Deno runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -8,7 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-serve(async (req) => {
+serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -24,7 +24,7 @@ serve(async (req) => {
 
     console.log('Generating ad with prompt:', prompt);
 
-    const content: any[] = [
+    const content: Array<Record<string, unknown>> = [
       {
         type: "text",
         text: `Create a professional product advertisement based on this prompt: ${prompt}. Make it visually striking, modern, and suitable for social media marketing.`
