@@ -9,3 +9,4 @@
   VITE_SUPABASE_PUBLISHABLE_KEY = ""
   # Force Rollup WASM in case Netlify tries to use native bindings
   ROLLUP_WASM = "1"
+  
