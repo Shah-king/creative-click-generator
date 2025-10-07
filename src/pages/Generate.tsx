@@ -58,8 +58,19 @@ const Generate = () => {
   };
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) {
-      toast.error("Please enter a prompt");
+    // Build an enriched prompt from the new form fields when the old `prompt` field is empty
+    const builtParts: string[] = [];
+    if (productName.trim()) builtParts.push(`Product: ${productName.trim()}`);
+    if (productDescription.trim()) builtParts.push(`Description: ${productDescription.trim()}`);
+    if (targetAudience.trim()) builtParts.push(`Target audience: ${targetAudience.trim()}`);
+    if (adFormat) builtParts.push(`Format: ${adFormat}`);
+    if (visualStyle) builtParts.push(`Style: ${visualStyle}`);
+    if (additionalNotes.trim()) builtParts.push(`Notes: ${additionalNotes.trim()}`);
+
+    const promptToUse = prompt.trim() || builtParts.join('. ');
+
+    if (!promptToUse.trim()) {
+      toast.error("Please enter a prompt or fill out the ad details");
       return;
     }
 
@@ -87,24 +98,24 @@ const Generate = () => {
         uploadedImageUrl = data.publicUrl;
       }
 
-      // Call edge function to generate ad
+      // Call edge function to generate ad (use the assembled prompt)
       const { data, error } = await supabase.functions.invoke('generate-ad', {
-        body: { 
-          prompt,
-          imageUrl: uploadedImageUrl 
-        }
+        body: {
+          prompt: promptToUse,
+          imageUrl: uploadedImageUrl,
+        },
       });
 
       if (error) throw error;
 
       setGeneratedUrl(data.imageUrl);
 
-      // Save to database
+      // Save to database (keep same columns as before but store the assembled prompt)
       await supabase.from('generated_ads').insert({
         user_id: user.id,
-        prompt,
+        prompt: promptToUse,
         original_image_url: uploadedImageUrl,
-        generated_image_url: data.imageUrl
+        generated_image_url: data.imageUrl,
       });
 
       toast.success("Ad generated successfully!");
