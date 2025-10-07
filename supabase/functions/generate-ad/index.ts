@@ -1,5 +1,7 @@
+// deno-lint-ignore-file
 // This file is a Deno function.
 declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error remote import for Deno runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
@@ -14,7 +16,24 @@ serve(async (req: Request) => {
 
   try {
     interface GenRequest { prompt: string; imageUrl?: string | null }
-    const { prompt, imageUrl } = await req.json() as GenRequest;
+    let body: unknown = null;
+    try {
+      body = await req.json();
+    } catch (jsonErr) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON body' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    const { prompt, imageUrl } = (body as GenRequest) || ({} as GenRequest);
+
+    if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
+      return new Response(
+        JSON.stringify({ error: 'prompt is required' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
     
     if (!LOVABLE_API_KEY) {
@@ -71,16 +90,23 @@ serve(async (req: Request) => {
       }
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      throw new Error(`AI gateway error: ${response.status}`);
+      return new Response(
+        JSON.stringify({ error: `AI gateway error: ${response.status}`, details: errorText }),
+        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await response.json();
     console.log('Generation response received');
-    
-    const generatedImageUrl = data.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-    
+
+    const generatedImageUrl = data?.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+
     if (!generatedImageUrl) {
-      throw new Error('No image generated');
+      console.error('No image URL in response', JSON.stringify(data).slice(0, 2000));
+      return new Response(
+        JSON.stringify({ error: 'No image generated', raw: data }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     return new Response(
