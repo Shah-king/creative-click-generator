@@ -19,7 +19,6 @@ const Generate = () => {
   const [generatedUrl, setGeneratedUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   // New form state matching the 'Create New Advertisement' template
-  const [mediaType, setMediaType] = useState<'image' | 'video'>('image');
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [targetAudience, setTargetAudience] = useState('');
@@ -190,22 +189,9 @@ const Generate = () => {
                 <div className="pt-2">
                   <div className="grid gap-3">
                     <div className="flex items-center space-x-3">
-                      <button
-                        type="button"
-                        className={`px-4 py-2 rounded-lg transition-all duration-150 ${mediaType === 'image'
-                          ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg border-transparent'
-                          : 'bg-white/10 text-white/80 border border-white/30'} `}
-                        onClick={() => setMediaType('image')}
-                      >
+                      <div className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg border-transparent">
                         Image Ad
-                      </button>
-                      <button
-                        type="button"
-                        disabled
-                        className={`px-4 py-2 rounded-lg bg-gray-300 text-gray-700 border-gray-300 cursor-not-allowed`}
-                      >
-                        Video Ad (Coming Soon)
-                      </button>
+                      </div>
                     </div>
 
                     <Input

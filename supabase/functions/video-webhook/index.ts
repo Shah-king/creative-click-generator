@@ -1,5 +1,6 @@
 // deno-lint-ignore-file
 declare const Deno: { env: { get(key: string): string | undefined } };
+// @ts-expect-error remote import for Deno runtime
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
